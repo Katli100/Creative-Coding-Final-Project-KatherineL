@@ -1,79 +1,81 @@
-let webcam;
-let date = new Date();
-let day = date.getDate();
-let hour = date.getHours();
-let minute = date.getMinutes();
-let month = date.getMonth() + 1; // Month is 0-indexed, so we add 1
-let second = date.getSeconds();
-let year = date.getFullYear();
-let record_btn;
-let is_recording = false;
-let recording_canvas;
+/* 
+p5.video recorder
+https://github.com/calebfoss/p5.videorecorder
+-------------------
+Example - Webcam
+
+Record video and audio from webcam
+Then display and download the recorded video
+*/
+
+/*
+This code is modified for my final project use case
+*/
+
+//  Declare variable to store VideoRecorder object
+let videoRecorder;
 let capture;
-let num_capture = 0;
-let email_entry;
-let age_entry;
-
-
-
-P5Capture.setDefaultOptions({
-  format: "mp4",
-  framerate: 30,
-  quality: 0.5,
-  width: 500,
-  disableUi: true,
-});
+let recordButton, stopButton, downloadButton, deleteButton;
+let deleteCount;
 
 function setup() {
-  createCanvas(2000,1000);
-  createSpan("What's your email?")
-  email_entry = createInput("email")
-  createSpan("How old are you?")
-  age_entry = createInput()
-  // recording_canvas = createGraphics(640,480);
-  webcam = createCapture(VIDEO)
-  webcam.size(1080, 500);
-  webcam.hide();
-  record_btn = createButton('Record');
-  record_btn.position(20, height - 50);
-  record_btn.mousePressed(toggle_recording);
-  capture = P5Capture.getInstance();
-
+  createCanvas(400, 400);
+  
+  //  Create a webcam capture with video and audio
+  //  When the stream is ready, setup the buttons
+  capture = createCapture({ video: true, audio: true }, setupButtons);
+  //  Mute webcam audio to prevent feedback
+  capture.volume(0);
+  //  Hide capture element (because it will be displayed on canvas instead)
+  capture.hide();
+  
+  //  Create a new VideoRecorder instance
+  //    with webcam capture as input
+  videoRecorder = new p5.VideoRecorder(capture);
+  //  Set callback for when recording is completed
+  //    and video file has been created
 }
 
 function draw() {
-  background(255);
-  image(webcam, 0, 0, width, height)
-
-
-
-}
-
-function toggle_recording(){
-  if (!is_recording) {
-    capture.start(); // Start recording
-    console.log("recording started")
-		num_capture +=1;
-		console.log(num_capture)
-    is_recording = true;
-    record_btn.html('Stop');
-  } else {
-    capture.stop(); // Stop recording
-    console.log("recording stopped")
-    is_recording = false;
-    record_btn.html('Record');
-  }
+    image(capture, 0, 0, width, height);
+    //  If recording
+    if (videoRecorder.recording) {
+      //  Display a red circle indicator
+      noStroke();
+      fill(200, 40, 20);
+      circle(width - 50, 50, 50);
+    }
 }
 
 
-function baseFilename(date) {
-  const zeroPadding = (n) => n.toString().padStart(2, "0");
-  const years = date.getFullYear();
-  const months = zeroPadding(date.getMonth() + 1);
-  const days = zeroPadding(date.getDate());
-  const hours = zeroPadding(date.getHours());
-  const minutes = zeroPadding(date.getMinutes());
-  const seconds = zeroPadding(date.getSeconds());
-  return `${years}${months}${days}-${hours}${minutes}${seconds}`;
+//  Create buttons and hide all except record
+function setupButtons() {
+  recordButton = createButton("Record");
+  recordButton.mousePressed(startRecording);
+  stopButton = createButton("Stop");
+  stopButton.hide();
+  downloadButton = createButton("Download");
+  downloadButton.hide();
+  deleteButton = createButton("Delete take")
+  deleteButton.hide()
 }
 
+
+function startRecording() {
+  //  Set buttons to manage recording
+  //    and show hidden buttons
+  stopButton.mousePressed(() => videoRecorder.stop());
+  stopButton.show();
+  deleteButton.show();
+  downloadButton.mousePressed(() => videoRecorder.save("webcam"));
+  downloadButton.show();
+}
+
+function stopRecording() {
+  downloadButton.mousePressed(() => videoRecorder.save("webcam"));
+  downloadButton.show();
+  deleteButton.show();
+  deleteButton.mousePressed(deleteCount +=1)
+  console.log(deleteCount)
+
+}
