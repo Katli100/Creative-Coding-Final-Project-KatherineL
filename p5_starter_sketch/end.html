@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ENG">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dear Future Me</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<script>
+    function redirectNext(){
+      var email = document.getElementById('email').value;
+  
+      localStorage.setItem('personEmail',email)
+  
+      if(email.trim() !==''){
+        window.location.href='record.html';
+      }else{
+        alert('email plz?');
+      }
+    }
+  </script>
+<body>
+  <main>
+    <div class="center">
+        <script>
+            var personName = localStorage.getItem('personName')
+            document.write('<h1>You did it! Now, future '+ personName+' will get this message<br> in one year to the email you provided. <br>See you in a year!</h1>');
+        </script>
+   
+    </div>
+  </main>
+</body>
+
+</html>

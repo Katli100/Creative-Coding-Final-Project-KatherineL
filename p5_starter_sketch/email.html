@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ENG">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dear Future Me</title>
+  <link rel="stylesheet" href="style.css">
+  
+</head>
+<script>
+    function redirectNext(){
+      var email = document.getElementById('email').value;
+  
+      localStorage.setItem('personEmail',email)
+  
+      if(email.trim() !==''){
+        window.location.href='record.html';
+      }else{
+        alert('email plz?');
+      }
+    }
+  </script>
+<body>
+  <main>
+    <div class="center">
+        <script>
+            var personName = localStorage.getItem('personName')
+            document.write('<h1>Nice to meet you '+ personName + '! Now, could I get your email address?</h1>');
+        </script>
+        <input type="text" id="email" placeholder="Your email">
+        <br>
+        <button onclick="redirectNext()">Next</button>
+
+    </div>
+  </main>
+</body>
+
+</html>

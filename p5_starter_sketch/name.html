@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ENG">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dear Future Me</title>
+  <link rel="stylesheet" href="style.css">
+
+  
+</head>
+<script>
+  function redirectNext(){
+    var name = document.getElementById('name').value;
+
+    localStorage.setItem('personName',name)
+
+    if(name.trim() !==''){
+      window.location.href='email.html';
+    }else{
+      alert('pssst i really need your name here plz');
+    }
+  }
+</script>
+<body>
+  <main>
+    <div class="center">
+        <h1>First, what's your name?</h1>
+        <input type="text" id="name" placeholder="Your name">
+        <br>
+        <button onclick="redirectNext()">Next</button>
+
+    </div>
+  </main>
+</body>
+
+</html>
